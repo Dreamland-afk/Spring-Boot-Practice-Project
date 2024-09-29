@@ -13,7 +13,6 @@ public class DemoA {
     @Autowired
     private ObjectFactory<DemoB> prototypeBeanFactory;
 
-
     public void print()
     {
         System.out.println("Printing from demo class A");
@@ -21,6 +20,7 @@ public class DemoA {
 
     public void getDemoBFromA()
     {
-        System.out.println("Printing the object of demo B from demo A: " + prototypeBeanFactory.getObject().hashCode());
+        System.out.println("Printing the object of demo B from demo A from b : " + prototypeBeanFactory.getObject().hashCode());
+
     }
 }
