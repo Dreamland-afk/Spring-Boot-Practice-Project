@@ -70,8 +70,13 @@ public class StreamClass {
         people.add(new Person("Isabella", 29));
         people.add(new Person("Jack", 30));
 
-        int number[] = {1,2,3,4,5,6,7,8};
+        int number[] = {1,2,3,4,5,6,7,7,8};
 
+        List<Integer> collect7 = Arrays.stream(number).boxed().collect(Collectors.collectingAndThen(Collectors.groupingBy(Function.identity(), Collectors.counting()), m -> m.entrySet().stream().filter(entr -> entr.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toList())));
+
+        Set<Integer> collect8 = Arrays.stream(number).boxed().collect(Collectors.groupingBy(Function.identity(), Collectors.counting())).entrySet().stream().filter(entry -> entry.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toSet());
+        System.out.println("Collection7: "+collect7);
+        System.out.println("Collection8: "+collect8);
         IntStream sum = Arrays.stream(number);
         System.out.println(sum);
 
@@ -96,7 +101,10 @@ public class StreamClass {
         System.out.println("Reduce"+reduce);
         Map<String, Optional<String>> collect3 = Stream.of(name).flatMap(str -> Arrays.stream(str.split(" "))).collect(Collectors.groupingBy(Function.identity(), Collectors.reducing((a, b) -> a)));
 
-        System.out.println(collect3);
+        long count = Stream.of(name).flatMap(str -> Stream.of(str.split(" "))).count();
+        System.out.println("Words in a sentance: "+count);
+
+        System.out.println("collect3: "+collect3);
 
 
         System.out.println(sum1);
@@ -129,10 +137,16 @@ public class StreamClass {
         List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5);
         List<Integer> list2 = Arrays.asList(3, 4, 5, 6, 1);
 
-        Stream.of(list1,list2).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        List<Integer> collect5 = Stream.of(list1, list2).flatMap(Collection::stream).collect(Collectors.collectingAndThen(Collectors.groupingBy(Function.identity(), Collectors.counting()), m -> m.entrySet().stream().filter(entr -> entr.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toList())));
 
+        System.out.println("collect5 : "+collect5);
 
-                ////
+        Map<String, Integer> map = Map.of("a", 1, "b", 2, "c", 3);
+        System.out.println(map);
+        List<Integer> collect6 = map.values().stream().collect(Collectors.toCollection(LinkedList::new));
+        System.out.println("collect6: "+collect6);
+
+        ////
 ////        List<String> list = Arrays.asList("abc1", "abc2", "abc3");
 ////        counter = 0;
 ////        Optional<String> stringStream = list.stream().filter(element -> {
