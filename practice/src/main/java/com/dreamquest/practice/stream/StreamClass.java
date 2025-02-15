@@ -123,6 +123,16 @@ public class StreamClass {
         System.out.println(collect1);
 
 
+        Map<Integer, List<String>> collect11 = people.stream().collect(Collectors
+                .collectingAndThen(Collectors.groupingBy(Person::getAge),
+                        m -> m.entrySet().stream().
+                                collect(Collectors.toMap(Map.Entry::getKey,
+                                        e -> e.getValue().stream().map(Person::getName).collect(Collectors.toList())))));
+
+
+        List<String> a =null;
+        a.stream();
+
         List<List<Integer>> listOfLists = Arrays.asList(
                 Arrays.asList(1, 2, 3),
                 Arrays.asList(4, 5),
@@ -137,8 +147,20 @@ public class StreamClass {
         List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5);
         List<Integer> list2 = Arrays.asList(3, 4, 5, 6, 1);
 
-        List<Integer> collect5 = Stream.of(list1, list2).flatMap(Collection::stream).collect(Collectors.collectingAndThen(Collectors.groupingBy(Function.identity(), Collectors.counting()), m -> m.entrySet().stream().filter(entr -> entr.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toList())));
+        List<Integer> collect5 = Stream.of(list1, list2).flatMap(Collection::stream)
+                .collect(
+                        Collectors
+                                .collectingAndThen(Collectors
+                                        .groupingBy(Function.identity(), Collectors.counting()), m -> m.entrySet().stream().filter(entr -> entr.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toList())));
 
+        Map<Integer, Long> collect9 = Stream.of(list1, list2).flatMap(List::stream).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        Map<Integer, Long> collect10 = Stream.of(list1, list2).flatMap(List::stream).
+                collect(Collectors.collectingAndThen(Collectors.groupingBy(Function.identity(), Collectors.counting()),
+                        m -> m.entrySet().stream().filter(e -> e.getValue() >1 ).
+                                collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))));
+
+        System.out.println("collect10 "+ collect10);
         System.out.println("collect5 : "+collect5);
 
         Map<String, Integer> map = Map.of("a", 1, "b", 2, "c", 3);
